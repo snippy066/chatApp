@@ -54,7 +54,6 @@ function Chat({ socket, username, room }) {
           })}
       </div>
       <div class="border-2 m-0 border-white text-white bg-gray-900 rounded-lg">
-        hi
       <div className="chat-footer">
         <input
           type="text"
