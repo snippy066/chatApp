@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import ScrollToBottom from "react-scroll-to-bottom";
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -28,12 +31,14 @@ function Chat({ socket, username, room }) {
     });
   }, [socket]);
 
+
   return (
     <div className="chat-window">
-      <div className="chat-header">
+      <div className="chat-header h-auto">
         <div class="flex justify-center text-bold pt-2 text-white">Chat Here</div>
       </div>
       <div className="chat-body">
+      <ScrollToBottom className="message-container">
           {messageList.map((messageContent) => {
             return (
               <div
@@ -52,8 +57,10 @@ function Chat({ socket, username, room }) {
               </div>
             );
           })}
+          </ScrollToBottom>
       </div>
-      <div class="border-2 m-0 border-white text-white bg-gray-900 rounded-lg">
+      <div class="border-2 m-0 border-white text-white bg-gray-900 rounded-lg mt-2">
+      {/* <ReactQuill  theme="snow" onChange={setCurrentMessage} placeholder="Chat comes here..." /> */}
       <div className="chat-footer">
         <input
           type="text"
@@ -69,8 +76,10 @@ function Chat({ socket, username, room }) {
         <button onClick={sendMessage}>&#9658;</button>
       </div>
       </div>
+      
     </div>
   );
+
 }
 
 export default Chat;
