@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+
+const modules = {
+  toolbar: [
+    ["bold", "italic", "strike","link"],
+    [{ list:  "ordered" }, { list:  "bullet" }],
+    ["blockquote", "code-block"],
+    ["image", "video"],
+        ["clean"],
+  ]
+}
+
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -18,10 +31,9 @@ function Chat({ socket, username, room }) {
           ":" +
           new Date(Date.now()).getMinutes(),
       };
-
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
-      setCurrentMessage("");
+      // setCurrentMessage("");
     }
   };
 
@@ -31,14 +43,15 @@ function Chat({ socket, username, room }) {
     });
   }, [socket]);
 
-
   return (
     <div className="chat-window">
       <div className="chat-header h-auto">
-        <div class="flex justify-center text-bold pt-2 text-white">Chat Here</div>
+        <div className="flex justify-center text-bold pt-2 text-white">
+          Chat Here
+        </div>
       </div>
       <div className="chat-body">
-      <ScrollToBottom className="message-container">
+        <ScrollToBottom className="message-container">
           {messageList.map((messageContent) => {
             return (
               <div
@@ -46,8 +59,7 @@ function Chat({ socket, username, room }) {
                 id={username === messageContent.author ? "you" : "other"}
               >
                 <div>
-                  <div className="message-content">
-                    <p>{messageContent.message}</p>
+                  <div className="message-content" dangerouslySetInnerHTML={{__html:messageContent.message}}>
                   </div>
                   <div className="message-meta">
                     <p id="time">{messageContent.time}</p>
@@ -57,29 +69,18 @@ function Chat({ socket, username, room }) {
               </div>
             );
           })}
-          </ScrollToBottom>
+        </ScrollToBottom>
       </div>
-      <div class="border-2 m-0 border-white text-white bg-gray-900 rounded-lg mt-2">
-      {/* <ReactQuill  theme="snow" onChange={setCurrentMessage} placeholder="Chat comes here..." /> */}
-      <div className="chat-footer">
-        <input
-          type="text"
-          value={currentMessage}
-          placeholder="Chat comes here"
-          onChange={(event) => {
-            setCurrentMessage(event.target.value);
-          }}
-          onKeyPress={(event) => {
-            event.key === "Enter" && sendMessage();
-          }}
-        />
-        <button onClick={sendMessage}>&#9658;</button>
+      <div className="border-2 m-0 border-white text-white bg-gray-900 rounded-lg mt-2 relative">
+        <ReactQuill modules={modules} theme="snow" onChange={setCurrentMessage} placeholder="Chat comes here..." className="text-white" />
+    
+          <div className="absolute -mt-8 flex right-0">
+        <button onClick={sendMessage} className="bg-green-400 justify-end mr-8 h-6 w-12 rounded-lg ">&#9658;</button>
+        </div> 
+
       </div>
-      </div>
-      
     </div>
   );
-
 }
 
 export default Chat;

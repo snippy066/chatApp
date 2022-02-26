@@ -21,8 +21,8 @@ function App() {
     <div className="App">
       {!showChat ? (
         <div className="joinChatContainer">
-          <h3 class="text-black underline pb-8">Join A Chat Room</h3>
-          <input class=""
+          <h3 className="text-black underline pb-8">Join A Chat Room</h3>
+          <input className=""
             type="text"
             placeholder="Enter your name"
             onChange={(event) => {
@@ -36,7 +36,7 @@ function App() {
               setRoom(event.target.value);
             }}
           />
-          <button onClick={joinRoom} class="mt-7">Join A Room</button>
+          <button onClick={joinRoom} className="mt-7">Join A Room</button>
         </div>
       ) : (
         <Chat socket={socket} username={username} room={room} />
